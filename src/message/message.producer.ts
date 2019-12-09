@@ -14,11 +14,19 @@ export class MessageProducer {
   private createConnection(url, queue) {
     this.connection = amqp.connect([url]);
 
-    this.connection.on('connected', () => {
-      this.logger.debug(`[AMQP-CM]: Connected ${queue}`);
+    this.connection.on('error', () => {
+      this.logger.log(`[AMQP-CM]: Found error at: ${queue}`);
     });
 
-    this.connection.on('disconnected', () => {
+    this.connection.on('close', () => {
+      this.logger.log(`[AMQP-CM]: Connection closed at: ${queue}`);
+    });
+
+    this.connection.on('connect', () => {
+      this.logger.log(`[AMQP-CM]: Connected ${queue}`);
+    });
+
+    this.connection.on('disconnect', () => {
       this.logger.error(`[AMQP-CM]: Disconnected ${queue}`);
     });
 
@@ -30,10 +38,18 @@ export class MessageProducer {
         });
       },
     });
+
+    this.channel.waitForConnect().then(() => {
+      this.logger.log(`[AMQP-CM]: Connection Created`);
+    });
   }
 
   async sendMessage(data) {
-    await this.channel.sendToQueue(this.queue, data);
-    this.logger.debug(`[AMQP-CM]: Sent message`);
+    await this.channel.sendToQueue(this.queue, data, {
+      // use delivery-mode:2 or persistence:true as message options to make message persistence
+      // @see https://www.rabbitmq.com/tutorials/tutorial-two-javascript.html
+      deliveryMode: 2,
+    });
+    // this.logger.debug(`[AMQP-CM]: Sent message`);
   }
 }

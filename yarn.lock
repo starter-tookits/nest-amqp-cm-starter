@@ -899,10 +899,10 @@ ajv@6.10.2, ajv@^6.1.0, ajv@^6.10.2, ajv@^6.5.5:
     json-schema-traverse "^0.4.1"
     uri-js "^4.2.2"
 
-amqp-connection-manager@^3.0.0:
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/amqp-connection-manager/-/amqp-connection-manager-3.0.0.tgz#9e273c616122033ca802f962b4d0e48895a5ff9a"
-  integrity sha512-a5MsUDsG+CqMjwk/WNFSTE0H4pAaWJXw7L24QFa3MeaB+KA05PXoBsppYlIzaIqc1XLWZwjO9J42AFHNrDsVFQ==
+amqp-connection-manager@^3.1.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/amqp-connection-manager/-/amqp-connection-manager-3.1.0.tgz#2ee7e4ceed3df541a373507c8dcec028331672e1"
+  integrity sha512-RJAe2/QrQsPjVFH5DY7Wu1ZzDyLRAly2BzvPJYogZulQOIRWfdLj3lVOHV4e4MQyYSANie4k5hX1zIEe8aLmPg==
   dependencies:
     promise-breaker "^5.0.0"
 

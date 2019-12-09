@@ -7,27 +7,17 @@ services:
     environment:
       RABBITMQ_DEFAULT_PASS: devuser
       RABBITMQ_DEFAULT_USER: devuser
-    logging:
-      driver: none
+    ports:
+      - 15673:15672
+      - 5673:5672
     networks:
-      - test-network
-
-  nest-amqp-consumer:
-    container_name: test_nest_amqp_consumer
-    image: node:lts
-    working_dir: /home/node/app
+      - test-amqp-cm-network
     volumes:
-      - ./:/home/node/app
-    depends_on:
-      - rabbitmq
-    command: yarn test
-    links:
-      - rabbitmq
-    networks:
-      - test-network
-    environment:
-      CI: 'true'
+      - test-amqp-cm-volume:/var/lib/rabbitmq
 
 networks:
-  test-network:
+  test-amqp-cm-network:
     driver: bridge
+
+volumes:
+  test-amqp-cm-volume:
