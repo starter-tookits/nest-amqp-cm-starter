@@ -22,11 +22,11 @@ export class MessageConsumer {
   ) {
     this.connection = amqp.connect([url]);
 
-    this.connection.on('connected', () => {
+    this.connection.on('connect', () => {
       this.logger.debug(`[AMQP-CM]: Connected ${queue}`);
     });
 
-    this.connection.on('disconnected', () => {
+    this.connection.on('disconnect', () => {
       this.logger.error(`[AMQP-CM]: Disconnected ${queue}`);
     });
 
@@ -44,6 +44,7 @@ export class MessageConsumer {
         });
     };
 
+    this.logger.log(`[AMQP-CM]: Try to createChannel ${queue}`);
     this.channel = this.connection.createChannel({
       json: true,
       setup: channel => {

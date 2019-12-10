@@ -29,6 +29,7 @@ export class MessageService implements OnModuleInit {
       EXAMPLE_AMQP_QUEUE,
       handler,
     );
+    this.logger.log(`Consumer inited`);
 
     setInterval(() => {
       this.logger.log(`Try to send 1000 messages to queue`);

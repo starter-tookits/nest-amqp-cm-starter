@@ -30,18 +30,28 @@ export class MessageProducer {
       this.logger.error(`[AMQP-CM]: Disconnected ${queue}`);
     });
 
+    this.logger.log(`[AMQP-CM]: Try to createChannel ${queue}`);
+
     this.channel = this.connection.createChannel({
       json: true,
       setup: channel => {
+        this.logger.log(`[AMQP-CM] Connection created for queue: ${queue}`);
         return channel.assertQueue(queue, {
           durable: true,
         });
       },
     });
 
-    this.channel.waitForConnect().then(() => {
-      this.logger.log(`[AMQP-CM]: Connection Created`);
-    });
+    this.channel
+      .waitForConnect()
+      .then(() => {
+        this.logger.log(`[AMQP-CM]: Connection Created`);
+      })
+      .catch(() => {
+        this.logger.error(
+          `[AMQP-CM]: Connection Created failed for queue ${queue}`,
+        );
+      });
   }
 
   async sendMessage(data) {
@@ -50,6 +60,6 @@ export class MessageProducer {
       // @see https://www.rabbitmq.com/tutorials/tutorial-two-javascript.html
       deliveryMode: 2,
     });
-    // this.logger.debug(`[AMQP-CM]: Sent message`);
+    this.logger.debug(`[AMQP-CM]: Sent message`);
   }
 }
